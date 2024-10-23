@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import  './navigationBar.css';
 
 
@@ -6,9 +7,9 @@ const NavigationBar =() => {
   return(
     <nav class="navBar">
         <ul>
-          <li><a href = "#" class = "Home" >Home</a></li>
-          <li><a href = "#" class = "Services" >services</a></li>
-          <li><a href = "#" class = "About" >about </a></li>
+          <li><Link to = "/home" class = "Home" >Home</Link></li>
+          <li><Link to = "/services" class = "Services" >services</Link></li>
+          <li><Link to = "/about" class = "About" >about </Link></li>
         </ul>
     </nav>
 );

@@ -1,0 +1,77 @@
+
+.HomePage{ 
+    min-height: 100vh;
+}
+.main-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    height: 100vh;
+}
+.left-content{
+    flex:1;
+    max-width: 50%;
+    margin-top: -70%;
+}
+.title{
+    font-size:4rem;
+    color: #add8e6;
+    text-shadow: 0px 0px 10px rgba(173, 216, 230, 0.8);
+    margin: 0;
+}
+.descr{
+    font-size: 1.5rem;
+    color: #add8e6;
+    text-shadow: 0px 0px 8px rgba(173, 216, 230, 0.8);
+    margin-top: 100px;
+}
+.right-content{
+    flex:1;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.contact-info section{
+    padding: 50px;
+    text-align: center;
+    margin: 0;
+    background-color: none;
+}
+.social-icons a .layer {
+    width: 55px;
+    height: 55px;
+    transition: 0.3s;
+    position: relative;
+    display: inline-block;
+}
+.social-icons a:hover .layer{
+    transform: rotate(-35deg) skew(20deg);
+}
+
+.social-icons a .layer span {
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 100%;
+    border: 1px solid #d5f0eb;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+.social-icons a .layer span.fab{
+    font-size: 30px;
+    line-height: 55px;
+    text-align: center;
+}
+.social-icons a:hover .layer span:nth-child(1){
+    opacity: 0.2;
+}
+.social-icons a:hover .layer span:nth-child(2){
+    opacity: 0.4;
+    transform: translate(5px, -5px);
+}
+.social-icons a:hover .layer span:nth-child(3){
+    opacity: 0.6;
+    translate: translate(10px, -10px);
+}
