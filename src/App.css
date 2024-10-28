@@ -1,41 +1,89 @@
 .App {
   text-align: center;
-  background: linear-gradient(155deg, #191f29, #61dafb);
-  height: 90px;
+  background: linear-gradient(155deg, #030000, #26425A);
   min-height: 100vh;
+  width: calc(100vw - 20px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: Left;
   font-size: calc(10px + 2vmin);
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 header{
   align-items: center;
   color: #61dafb;
-  font-size: calc(10px + 2vmin);
+  font-size: 1em;
 }
-
 .App-link {
   color: #61dafb;
 }
-
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.contact-info {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  background-color: rgba(0,0,0,0.4);
+  columns: 200px 2;
+  padding: 10px;
+  align-items: center;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.contact-info h2, p{
+  font-size: 1.2rem;
+  color:#add8e6;
+  text-shadow: 0px 0px 6px rgba(173, 216, 230, 0.8);
+}
+footer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.4);
+  width: 100%;
+  min-height: 100%;
+}
+.social-icons{
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+.social-icons a .layer {
+  width: 55px;
+  height: 55px;
+  transition: 0.3s;
+  position: relative;
+  display: inline-block;
+ 
+}
+.social-icons a:hover .layer{
+  transform: rotate(-35deg) skew(20deg);
+}
+
+.social-icons a .layer span {
+  position: absolute;
+  top:0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border: 1px solid  #fff;
+  box-shadow: 0px 0px 8px rgba(24, 131, 167, 0.363);;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+
+.social-icons a .layer span.fab{
+  font-size: 30px;
+  line-height: 55px;
+  text-align: center;
+}
+.social-icons a:hover .layer span:nth-child(1){
+  opacity: 0.4;
+}
+.social-icons a:hover .layer span:nth-child(2){
+  opacity: 0.6;
+  transform: translate(5px, -5px);
+}
+.social-icons a:hover .layer span:nth-child(3){
+  opacity: 0.8;
+  translate: translate(10px, -10px);
+}
+.social-icons a:hover .layer span:nth-child(4){
+  opacity: 0.9;
+  translate: translate(15px, -15px)
 }

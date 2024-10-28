@@ -1,27 +1,58 @@
+* {
+  box-sizing: border-box;
+}
  .ServicePage {
-    text-align: center;
-    background-color: linear-gradient(155deg, #191f29, #61dafb);
-    height: 90px;
     min-height: 100vh;
+    background-color: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: Left;
-    font-size: calc(10px + 2vmin);
-
+    width: auto;
   }
  
  h1 {
   margin-bottom: 20px;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(20px + 2vmin);
   color: rgb(90, 188, 205);
     
   }
   section{
+    height:auto;
     display: flex;
-    text-align: left;
+    justify-content: center;
+    align-items: center;
     color: #61dafb;
     background: none;
+    
+  }
+  .card-container{
+    display: flex;
+    align-items: center;
+    padding: 20px; 
+    gap: 20px;
+    height: 500px;
+  }
+  .card{
+    justify-content: space-evenly;
+    display: flexbox;
+    background-color: #3e4f53;
+    border-radius: 20px;
+    box-shadow: 0 1rem 2rem -1rem black;
+    padding: 20px;
+    text-align: center;
+    width:200px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card h3{
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
+  .card p{
+    font-size: 1rem;
+  }
+  .card-container .card:hover{
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(97, 218, 251, 0.7), 0 0 30px rgba(97, 218, 251, 0.5);
+  
   }
   button {
     background: linear-gradient(135deg, #61dafb, #21a1f1);
@@ -35,13 +66,6 @@
     transition: all 0.3s ease-in-out;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     letter-spacing: 1px;
-}
-.buttonContainer {
-  position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px;
 }
 button:hover{
   background: linear-gradient(135deg, #21a1f1, #007acc);
