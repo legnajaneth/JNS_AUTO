@@ -12,7 +12,7 @@ const NavigationBar =() => {
           <li><Link to = "/home" class = "Home" >Home</Link></li>
           <li><Link to = "/services" class = "Services" >Services</Link></li>
           <li><Link to = "/about" class = "About" >About </Link></li>
-          <li><Link to = "/" class = "Inquire" >Inquire</Link></li>
+          <li><Link to = "/inquire" class = "Inquire" >Inquire</Link></li>
         </ul>
     </nav>
 );
