@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="App">
     <main>
-      <Router>
+      <Router basename="/JNS_AUTO">
         <NavigationBar/>
           <Routes>
             <Route path="/" element={<HomePage />} />
