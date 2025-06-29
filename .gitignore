@@ -8,8 +8,13 @@
 # testing
 /coverage
 
-# production
+# Firebase files to ignore
+.firebase/
+firebase-debug.log
+.firebaserc
+firebase.json
 
+# production
 backend/
 
 # misc

@@ -24,7 +24,6 @@
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "eslint": "^9.30.0",
     "express": "^4.21.2",
     "firebase": "^11.7.3",
     "framer-motion": "^12.19.1",
@@ -41,7 +40,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
@@ -66,6 +65,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "eslint": "^8.56.0",
+    "eslint-config-react-app": "^7.0.1",
     "gh-pages": "^6.2.0"
   },
   "description": "JNS Auto Car detailing services website",
