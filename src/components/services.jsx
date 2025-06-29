@@ -3,7 +3,7 @@ import './services.css';
 
 const ServicePage = () => {
     return(
-        <div>
+        <div className="services">
             <h1><i>Auto Spa Services</i></h1>
             <p>We provide a variety of services to
                 <br></br> keep your car clean 

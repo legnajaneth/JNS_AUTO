@@ -1,51 +1,96 @@
-* {
-    box-sizing: border-box;
-}
+
 .HomePage{ 
     min-height: 100vh;
-    background-color: none;
+    background-image: url(../images/backgrndimg.jpg);
     display: flex;
     flex-direction: column;
 }
 .main-header{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     padding: 50px;
     height: 700px;
     width: 100%;
     box-sizing: border-box;
 }
-.left-content{
-    flex:1;
-    max-width: 50%;
-   
+.title-spot{
+    flex:1; 
 }
 .title{
     opacity: 0;
-    font-size:4rem;
-    color: #add8e6;
-    text-shadow: 0px 0px 10px rgba(173, 216, 230, 0.8);
-    margin: 0;
+    font-size:7rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    text-shadow: 0px 0px 10px rgba(250, 250, 250, 0.8);
+    margin: 100px;
     animation: fade-in-up 1s, glitch 1s forwards;
     animation-delay: .5s;
 }
 .descr{
     opacity: 0;
-    font-size: 1.5rem;
-    color: #add8e6;
-    text-shadow: 0px 0px 8px rgba(173, 216, 230, 0.8);
-    margin-top: 100px;
+    font-size: 4.5rem;
+    color: #ffffff;
+    text-shadow: 0px 0px 10px rgb(14, 51, 94);
+    margin-top: -100px;
+    margin-bottom: 500px;
     animation: fade-in-up 1s forwards;
     animation-delay: 1s;
 }
-.right-content{
-    flex:1;
-    display:flex;
-    justify-content: center;
-    align-items: center;
+.right-content {
+  display:flex;
+  flex-direction: column; /* Stack the images vertically */
+  align-items: center; /* Align images to the right */
 }
-
+.pic-border{
+  background: linear-gradient(5deg,#000000, #ffffff2f,#000000) border-box,
+                linear-gradient(45deg, transparent 15%,#000000, #ffffff2f,#000000) border-box;
+    border: 10px solid transparent;
+    border-radius: 30px;
+}
+  
+  .mySlides {
+    display: none;
+    width: 100%; /* Make sure the images fill the container width */
+    height: 100%; /* Set a fixed height for all images */
+    object-fit: cover; /* Ensures the images cover the area while maintaining aspect ratio */
+  }
+  
+  .mySlides.active {
+    width: 500px; 
+    height: 550px; 
+    object-fit: cover; /* Preserve aspect ratio and fit the images within the frame */
+    border-radius: 8px;
+    display: block; /* Only the active slide is visible */
+  }
+  
+  .next-pic-left,
+  .next-pic-right {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 18px;
+  }
+  
+  .next-pic-left {
+    left: 0;
+  }
+  
+  .next-pic-right {
+    right: 0;
+  }
+  
+  .next-pic-left:hover,
+  .next-pic-right:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  
 @keyframes glitch {
     0% {
         opacity: 0;
@@ -77,3 +122,76 @@
       opacity: 1;
     }
   }
+  @media (max-width: 1024px) {
+    .main-header {
+        flex-direction: column;
+        height: auto; 
+        padding: 5px;
+    }
+
+    .title-spot,
+    .right-content {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .title {
+        font-size: 5rem; 
+        margin-top: 150px;
+    }
+
+    .descr {
+        font-size: 3rem; 
+        margin-top: 8px;
+    }
+}
+
+/* For screens 768px and below (Phones and smaller devices) */
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        height: auto; 
+        padding: 20px;
+    }
+
+    .title-spot,
+    .right-content {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .title {
+        font-size: 2.5rem; 
+        margin-top: 100px;
+    }
+
+    .descr {
+        font-size: 2rem; 
+        margin-top: 5px;
+    }
+}
+
+/* For screens 480px and below (Small phones) */
+@media (max-width: 480px) {
+    .main-header {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .title-spot,
+    .right-content {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .title {
+        font-size: 2rem; 
+        text-align: center; 
+        margin-top: 5px;
+    }
+
+    .descr {
+        font-size: 1rem;
+        margin-top: 20px;
+    }
+}

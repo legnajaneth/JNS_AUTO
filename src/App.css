@@ -1,11 +1,11 @@
 .App {
   text-align: center;
-  background: linear-gradient(155deg, #030000, #26425A);
-  min-height: 100vh;
-  width: calc(100vw - 20px);
+  background-image: url(./images/backgrndimg.jpg);
+  background-size: cover;
+  opacity: .9;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
-  align-items: center;
   font-size: calc(10px + 2vmin);
 }
 header{
@@ -17,11 +17,8 @@ header{
   color: #61dafb;
 }
 .contact-info {
-  display: flex;
+  display:block;
   width: 100%;
-  flex-direction: column;
-  background-color: rgba(0,0,0,0.4);
-  columns: 200px 2;
   padding: 10px;
   align-items: center;
 }
@@ -30,18 +27,17 @@ header{
   color:#add8e6;
   text-shadow: 0px 0px 6px rgba(173, 216, 230, 0.8);
 }
-footer {
-  position: relative;
+footer { 
   display: flex;
-  justify-content: center;
+  flex-direction:column ;
   background-color: rgba(0,0,0,0.4);
-  width: 100%;
   min-height: 100%;
+  bottom: 0;
 }
 .social-icons{
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 10px;
 }
 .social-icons a .layer {
   width: 55px;
@@ -86,4 +82,53 @@ footer {
 .social-icons a:hover .layer span:nth-child(4){
   opacity: 0.9;
   translate: translate(15px, -15px)
+}
+@media (max-width: 600px) {
+  .App {
+
+    font-size: calc(10px + 4vmin); /* Larger text on small screens */
+  }
+
+  .contact-info {
+    flex-direction: column; /* Stack contact info vertically */
+    padding: 20px;
+  }
+
+  .contact-info h2, p {
+    font-size: 1rem; /* Adjust font size for smaller screens */
+  }
+
+  footer {
+    flex-direction: column; /* Stack footer items vertically */
+  }
+
+  .social-icons {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* For tablets (iPads and similar devices) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .App {
+    font-size: calc(10px + 3vmin); /* Adjust font size for tablets */
+  }
+
+  .contact-info {
+    flex-direction: column; /* Stack contact info vertically */
+    padding: 15px;
+  }
+
+  footer {
+    flex-direction: row; /* Keep footer items in a row */
+    justify-content: space-around;
+  }
+
+  .social-icons {
+    gap: 25px;
+  }
+
+  .contact-info h2, p {
+    font-size: 1.1rem; /* Slightly larger text on tablets */
+  }
 }

@@ -4,7 +4,7 @@
     flex-direction: column;
 }
 .form-container {
-    width: 600px;
+    
     background: linear-gradient(#212121, #212121) padding-box,
                 linear-gradient(145deg, transparent 35%,#1a4d8f, #40c9ff) border-box;
     border: 2px solid transparent;
@@ -105,3 +105,51 @@
     border-color: #717171;
   }
   
+  /* For screens 1024px and below (Tablets and smaller screens) 
+@media (max-width: 1024px) {
+  .form-container {
+    width: 90%; 
+    margin-bottom: 60px; 
+  }
+
+  .form-container .form-submit-btn {
+    width: 50%; 
+  }
+}
+
+For screens 768px and below (Phones and smaller devices) 
+@media (max-width: 768px) {
+  .form-container {
+    width: 90%; 
+    margin-bottom: 40px; 
+    padding: 20px 16px; 
+  }
+
+  .form-container .form-group input,
+  .form-container .form-group textarea {
+    padding: 10px 12px; 
+  }
+
+  .form-container .form-submit-btn {
+    width: 70%; 
+  }
+}
+
+ For screens 480px and below (Small phones) 
+@media (max-width: 480px) {
+  .form-container {
+    width: 95%; 
+    margin-bottom: 20px; 
+    padding: 16px 12px; 
+  }
+
+  .form-container .form-submit-btn {
+    width: 80%; 
+  }
+
+  .form-container .form-group input,
+  .form-container .form-group textarea {
+    padding: 8px 10px; 
+  }
+}
+  */

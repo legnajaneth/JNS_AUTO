@@ -21,15 +21,15 @@ function App() {
           </Routes>
       </Router>
     </main>
-    <section className="contact-info">
+
+      <footer>
+        <section className="contact-info">
         <h2> Contact Us </h2>
           <p>Email: emailgoeshere@email.com</p>
           <p>Phone: +1-111-111-1111</p>
           <p>Service In the Greater Sacramento Area</p>
           
-      </section>
-
-      <footer>
+       
         <div className="social-icons">
           <a href = "https://facebook.com"target="_blank" rel="noopener noreferrer">
             <div className="layer"> 
@@ -50,7 +50,7 @@ function App() {
               <span class = "fab fa-instagram"></span>
             </div>
           </a>
-        </div>
+        </div> </section>
       </footer>
      </div>
   );
