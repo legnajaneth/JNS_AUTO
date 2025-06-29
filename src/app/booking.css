@@ -1,0 +1,386 @@
+/* Base styles */
+.booking-container {
+  padding: 6rem 1rem 2rem;
+  min-height: 100vh;
+  background-color: #111111;
+  color: white;
+}
+
+.booking-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.booking-header h2 {
+  font-size: 2rem;
+  color: #61dafb;
+  margin-bottom: 0.5rem;
+}
+
+.booking-header p {
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+/* Step indicator */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.step {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #333;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.step.active {
+  background-color: #61dafb;
+  color: #111;
+}
+
+/* Layout */
+.booking-layout {
+  display: grid;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .booking-layout {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* Booking card styles */
+.booking-card {
+  background: rgba(30, 30, 40, 0.8);
+  border: 1px solid rgba(97, 218, 251, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  padding: 1.5rem 1.5rem 0;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.card-icon {
+  color: #61dafb;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+/* Service options */
+.service-options {
+  display: grid;
+  gap: 1rem;
+}
+
+.service-option {
+  padding: 1.5rem;
+  background: rgba(40, 40, 50, 0.6);
+  border: 1px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.service-option:hover {
+  border-color: #61dafb;
+}
+
+.service-option.selected {
+  border-color: #61dafb;
+  background: rgba(97, 218, 251, 0.1);
+}
+
+.service-option h3 {
+  color: #61dafb;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.service-option p {
+  color: #ccc;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.service-price {
+  color: #61dafb;
+  font-weight: bold;
+}
+
+/* Calendar section */
+.calendar-section {
+  background: rgba(20, 20, 30, 0.8);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.selected-date {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(97, 218, 251, 0.1);
+  border-radius: 0.5rem;
+  text-align: center;
+  color: #61dafb;
+}
+
+/* Time options */
+.time-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.time-option {
+  padding: 0.75rem;
+  background: rgba(40, 40, 50, 0.6);
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  border: none;
+  font-family: inherit;
+}
+
+.time-option:hover {
+  background: rgba(60, 60, 70, 0.8);
+}
+
+.time-option.selected {
+  background: #61dafb;
+  color: #111;
+  border-color: #61dafb;
+}
+
+/* Form styles */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: white;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #414141;
+  background-color: transparent;
+  color: white;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Vehicle images */
+.vehicle-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.vehicle-images img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Booking summary */
+.booking-summary {
+  position: sticky;
+  top: 1rem;
+}
+
+.summary-card {
+  background: rgba(30, 30, 40, 0.8);
+  border: 1px solid rgba(97, 218, 251, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.summary-header {
+  padding: 1.5rem 1.5rem 0;
+}
+
+.summary-title {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.summary-content {
+  padding: 1.5rem;
+}
+
+.summary-section {
+  margin-bottom: 1.5rem;
+}
+
+.summary-section h4 {
+  color: #61dafb;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.service-summary {
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid #333;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Navigation buttons */
+.navigation-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.continue-button,
+.confirm-button,
+.back-button {
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.continue-button,
+.confirm-button {
+  background: #61dafb;
+  color: #111;
+  border: none;
+}
+
+.continue-button:hover,
+.confirm-button:hover {
+  background: #0f468f;
+  color: white;
+}
+
+.continue-button:disabled,
+.confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.back-button {
+  background: transparent;
+  border: 1px solid #61dafb;
+  color: #61dafb;
+}
+
+.back-button:hover {
+  background: rgba(97, 218, 251, 0.1);
+}
+
+/* Booking confirmation */
+.booking-confirmation {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(30, 30, 40, 0.8);
+  border-radius: 16px;
+  border: 1px solid rgba(97, 218, 251, 0.2);
+}
+
+.confirmation-icon {
+  color: #4BB543;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+}
+
+.booking-confirmation h2 {
+  color: #61dafb;
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-details {
+  margin-top: 1.5rem;
+  color: #ccc;
+}
+
+/* Status messages */
+.status-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.status-message.success {
+  background-color: rgba(212, 237, 218, 0.2);
+  color: #d4edda;
+}
+
+.status-message.error {
+  background-color: rgba(248, 215, 218, 0.2);
+  color: #f8d7da;
+}
+
+/* Calendar disabled dates */
+.rbc-disabled-date {
+  background-color: rgba(255, 68, 68, 0.3) !important;
+  cursor: not-allowed;
+}

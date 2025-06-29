@@ -1,0 +1,352 @@
+/* Home Page */
+.homepage {
+  min-height: 100vh;
+  background-image: url(../images/backgrndimg.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 1rem;
+  text-align: center;
+}
+
+.title-spot {
+  background-color: rgba(17, 17, 17, 0.7);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 3rem;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  text-shadow: 0px 0px 10px rgba(250, 250, 250, 0.8);
+  margin-bottom: 1rem;
+  animation: fade-in-up 1s, glitch 1s forwards;
+  animation-delay: 0.5s;
+}
+
+.descr {
+  font-size: 2rem;
+  color: #ffffff;
+  text-shadow: 0px 0px 10px rgb(14, 51, 94);
+  animation: fade-in-up 1s forwards;
+  animation-delay: 1s;
+  opacity: 0.9;
+}
+/* Social Section Styles */
+.social-section {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 40px 20px;
+  margin-top: -50px;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.social-section.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.section-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.section-tabs-glass-card{
+  display: flex;
+  flex-direction: row;
+}
+
+.section-tabs button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px 15px;
+  position: relative;
+}
+
+.section-tabs button.active {
+  font-weight: bold;
+}
+
+.section-tabs button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #61dafb;
+}
+
+.section-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 300px;
+}
+.tab-button {
+  flex: 1;
+  padding: 1rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-button.active {
+  color: #3498db;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #3498db;
+  border-radius: 3px 3px 0 0;
+}
+
+.tab-button:hover:not(.active) {
+  background: #f8f9fa;
+  color: #2c3e50;
+}
+
+/* Instagram Feed */
+.instagram-feed {
+  padding: 20px;
+}
+
+.posts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.instagram-post {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.instagram-post:hover {
+  transform: scale(1.03);
+}
+
+.instagram-post img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+.caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+/* Reviews Carousel */
+.reviews-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.review-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 25px;
+  max-width: 600px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+}
+
+.review-header {
+  margin-bottom: 15px;
+}
+
+.review-header h3 {
+  margin: 0 0 5px 0;
+  color: white;
+}
+
+.stars {
+  color: #ffc107;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.review-text {
+color: white;
+font-style: italic;
+line-height: 1.6;
+}
+
+.nav-button {
+background: rgba(255, 255, 255, 0.2);
+border: none;
+color: white;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+font-size: 1.2rem;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+background: rgba(255, 255, 255, 0.3);
+}
+.instagram-feed,
+.reviews-carousel {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.instagram-feed.visible,
+.reviews-carousel.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade-in animation for sections */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.instagram-feed,
+.reviews-carousel {
+animation: fadeIn 1s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+.posts-container {
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.review-card {
+padding: 15px;
+}
+.profile-card{
+  margin-left: 100px;
+}
+}
+
+@media (max-width: 576px) {
+.section-tabs {
+flex-direction: column;
+align-items: center;
+gap: 10px;
+}
+
+.reviews-carousel {
+flex-direction: column;
+}
+
+.nav-button {
+margin: 10px 0;
+}
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profile-card{
+  margin-left: 5px;
+}
+}
+
+@keyframes glitch {
+  0% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  15% {
+    opacity: 1;
+    text-shadow: 1px 1px #043369, -1px -1px #add8e6;
+  }
+  35% {
+    text-shadow: 10px 10px #add8e6, -10px -10px #043369;
+  }
+  65% {
+    text-shadow: 1px 1px #1c4e86, -1px -1px #add8e6;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 3px 3px #1c4e86, -3px -3px #add8e6;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+  
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+  .title {
+    font-size: 4rem;
+  }
+  
+  .descr {
+    font-size: 2.5rem;
+  }
+  
+}
+
+@media (min-width: 992px) {
+  .title {
+    font-size: 5rem;
+  }
+  
+  .descr {
+    font-size: 3rem;
+  };
+
+}
+@media (max-width: 1023px) {
+ .profile-card{
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

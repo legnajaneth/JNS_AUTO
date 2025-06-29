@@ -1,0 +1,188 @@
+/* Services Page - Responsive Scaling */
+.services {
+  padding: 4rem 1rem 2rem;
+  min-height: 100vh;
+  text-align: center;
+  background-color: #111111;
+}
+
+.services h1 {
+  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  color: #61dafb;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px #1f5e615d, 0 0 20px #00f2ff18, 0 0 30px #00f2ff18;
+  animation: neonText 5.5s ease-in-out infinite alternate;
+}
+
+.services p {
+  font-size: clamp(1rem, 3.5vw, 1.2rem);
+  color: #ffffff;
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  --white: hsl(0,0%,100%);
+  --black: hsl(240,15%, 9%);
+  --paragraph: hsl(0,0%,83%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 350px;
+  background-color: hsla(240, 15%, 9%, 1);
+  background-image: radial-gradient(
+      at 88% 40%,
+      hsla(240, 15%, 9%, 1) 0px,
+      transparent 85%
+    ),
+    radial-gradient(at 49% 30%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+    radial-gradient(at 14% 26%, hsla(240, 15%, 9%, 1) 0px, transparent 85%),
+    radial-gradient(at 0% 64%, hsl(189, 99%, 26%) 0px, transparent 85%),
+    radial-gradient(at 41% 94%, hsl(189, 97%, 36%) 0px, transparent 85%),
+    radial-gradient(at 100% 99%, hsl(188, 94%, 13%) 0px, transparent 85%);
+  border-radius: 1rem;
+  box-shadow: 0px -16px 24px 0px rgba(255, 255, 255, 0.212) inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card h3 {
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: #61dafb;
+  margin-bottom: 0.5rem;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.card li {
+  position: relative;
+  padding-left: 1.5rem;
+  color: var(--paragraph);
+  font-size: clamp(0.9rem, 3vw, 1rem);
+  line-height: 1.5;
+}
+
+.card li::before {
+  content: "•";
+  color: #61dafb;
+  position: absolute;
+  left: 0;
+}
+
+.price {
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  font-weight: bold;
+  color: #61dafb;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.book-now-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #61dafb, #21a1f1);
+  color: white;
+  border: none;
+  padding: clamp(0.8rem, 3vw, 1rem) clamp(1.5rem, 4vw, 1.8rem);
+  font-size: clamp(0.9rem, 3.5vw, 1rem);
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.book-now-btn:hover {
+  background: linear-gradient(135deg, #21a1f1, #007acc);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+}
+
+.book-now-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.card-container .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(97, 218, 251, 0.7), 0 0 30px rgba(97, 218, 251, 0.5);
+}
+
+@keyframes neonText {
+  0% {
+    text-shadow: 0 0 10px #244e509d, 0 0 20px #0f7070, 0 0 30px #003436;
+  }
+  50% {
+    text-shadow: 0 0 20px #244e509d, 0 0 40px #0f7070, 0 0 60px #003436;
+  }
+  100% {
+    text-shadow: 0 0 10px #244e509d, 0 0 20px #0f7070, 0 0 30px #003436;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .services {
+    min-height: 100vh;
+    padding: 4.5rem 1rem 2rem;
+  }
+  
+  .card-container {
+    gap: 1.2rem;
+  }
+  
+  .card {
+    padding: 1.2rem;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .services {
+    min-height: 100vh;
+    padding: 3rem 1rem 1.5rem;
+  }
+  
+  .card-container {
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .card {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  
+  .card li {
+    padding-left: 1.2rem;
+    font-size: 0.95rem;
+  }
+}
