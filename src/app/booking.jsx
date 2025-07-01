@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase/firebaseConfig';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
