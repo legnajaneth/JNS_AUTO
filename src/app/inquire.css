@@ -13,7 +13,7 @@
 
 .inquire-header h2 {
   font-size: 2rem;
-  color: #61dafb;
+  color: #fb6161;
   margin-bottom: 0.5rem;
 }
 
@@ -24,7 +24,7 @@
 
 .inquire-form {
   background: linear-gradient(#212121, #212121) padding-box,
-              linear-gradient(145deg, transparent 35%,#1a4d8f, #40c9ff) border-box;
+              linear-gradient(145deg, transparent 35%,#8f1a1a, #ff4040) border-box;
   border: 2px solid transparent;
   padding: 1.5rem;
   border-radius: 16px;
@@ -86,7 +86,7 @@
 
 .progress-bar {
   height: 6px;
-  background-color: #61dafb;
+  background-color: #fb6161;
   transition: width 0.3s ease;
 }
 
@@ -100,7 +100,7 @@
 .submit-btn {
   width: 100%;
   padding: 1rem;
-  background: #61dafb;
+  background: #fb6161;
   color: #111111;
   border: none;
   border-radius: 8px;
@@ -111,7 +111,7 @@
 }
 
 .submit-btn:hover {
-  background: #0f468f;
+  background: #8f0f0f;
   color: #ffffff;
 }
 

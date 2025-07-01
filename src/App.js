@@ -10,6 +10,8 @@ import AdminPage from "./app/admin.jsx";
 import AdminLogin from './app/AdminLogin';
 import ProtectedRoute from './app/ProtectedRoute';
 import Reviews from './app/Reviews';
+import Silk from "./components/SilkBackground.js";  
+import Threads from "./components/ThreadBackground.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
@@ -52,8 +54,20 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <main>
+     <div className="App">
+      {/* Add this wrapper div */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 0
+      }}>
+        <Threads />
+      </div>
+      
+      <div className="content-container">
         <Router>
           <NavigationBar isAdmin={isAdmin} />
           <Routes>
@@ -75,7 +89,7 @@ function App() {
             />
           </Routes>
         </Router>
-      </main>
+      </div>
 
       <footer>
   <div className="footer-container">

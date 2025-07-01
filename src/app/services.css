@@ -135,6 +135,121 @@
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(97, 218, 251, 0.7), 0 0 30px rgba(97, 218, 251, 0.5);
 }
+/* Add-ons Section Styles */
+.add-ons-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.add-ons-section h2 {
+  color: #61dafb;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.add-ons-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.add-on-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #61dafb;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.add-on-card:hover {
+  background: rgba(97, 218, 251, 0.2);
+  transform: translateY(-3px);
+}
+
+.add-on-card.selected {
+  background: rgba(97, 218, 251, 0.3);
+  border: 2px solid #61dafb;
+  box-shadow: 0 0 10px rgba(97, 218, 251, 0.5);
+}
+
+.add-ons-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.back-btn {
+  background: transparent;
+  color: #61dafb;
+  border: 1px solid #61dafb;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: rgba(97, 218, 251, 0.1);
+}
+/* Add-ons Section Styles */
+.add-ons-section {
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background: rgba(97, 218, 251, 0.1);
+  border-radius: 8px;
+}
+
+.add-ons-section h4 {
+  color: #61dafb;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.add-ons-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.add-ons-list li {
+  padding: 0.5rem;
+  margin: 0.2rem 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.add-ons-list li:hover {
+  background: rgba(97, 218, 251, 0.2);
+}
+
+.add-ons-list li.selected {
+  background: rgba(97, 218, 251, 0.3);
+  border-left: 3px solid #61dafb;
+}
+
+@media (max-width: 768px) {
+  .add-ons-list li {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+}
+@media (max-width: 600px) {
+  .add-ons-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .add-ons-actions {
+    flex-direction: column;
+  }
+}
 
 @keyframes neonText {
   0% {

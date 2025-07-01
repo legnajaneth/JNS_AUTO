@@ -75,7 +75,7 @@
   left: 10px;
   font-size: 0.8rem;
   color: #fff;
-  background: rgba(31, 38, 135, 0.6);
+  background: rgba(135, 31, 31, 0.6);
 }
 
 .form-input, .form-textarea {
@@ -112,7 +112,7 @@
   gap: 8px;
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.8), rgba(41, 128, 185, 0.8));
+  background: linear-gradient(135deg, rgba(219, 52, 52, 0.8), rgba(185, 41, 41, 0.8));
   color: white;
   border: none;
   border-radius: 8px;
@@ -125,7 +125,7 @@
 
 .submit-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 5px 15px rgba(219, 52, 52, 0.3);
 }
 
 .submit-button:disabled {

@@ -23,7 +23,7 @@
 }
 
 .inquiry-card.unread {
-  border-left: 4px solid #6c8eff;
+  border-left: 4px solid #ff6c6c;
   background: rgba(40, 45, 60, 0.7);
 }
 
@@ -61,8 +61,8 @@
 }
 
 .status-badge.new {
-  color: #6c8eff;
-  border: 1px solid rgba(108, 142, 255, 0.3);
+  color: #ff6c6c;
+  border: 1px solid rgba(255, 108, 108, 0.3);
 }
 
 .status-badge.in-progress {
@@ -312,8 +312,8 @@ body.modal-open {
 
 .status-select:focus {
   outline: none;
-  border-color: rgba(108, 142, 255, 0.5);
-  box-shadow: 0 0 0 2px rgba(108, 142, 255, 0.2);
+  border-color: rgba(255, 108, 108, 0.5);
+  box-shadow: 0 0 0 2px rgba(255, 108, 108, 0.2);
 }
 
 .message-detail {

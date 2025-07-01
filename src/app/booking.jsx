@@ -16,6 +16,7 @@ const ClockIcon = () => <span className="card-icon">⏱️</span>;
 const MagicIcon = () => <span className="card-icon">✨</span>;
 const CheckIcon = () => <span className="card-icon">✓</span>;
 const CarIcon = () => <span className="card-icon">🚗</span>;
+const SizeIcon = () => <span className="card-icon">📏</span>;
 
 const Booking = () => {
   // Step management
@@ -29,10 +30,12 @@ const Booking = () => {
     email: '',
     phone: '',
     vehicle: '',
-    service: 'Exterior Wash',
+    vehicleSize: '',
+    service: '',
     date: '',
     time: '09:00',
-    notes: ''
+    notes: '',
+    addOns: []
   });
   
   const [vehicleImages, setVehicleImages] = useState([]);
@@ -40,37 +43,77 @@ const Booking = () => {
   const [blackoutDates, setBlackoutDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [status, setStatus] = useState({ type: '', message: '' });
+  const [selectedAddOns, setSelectedAddOns] = useState([]);
 
-  // Services data
+  // Services data with add-ons and tiered pricing
   const [services] = useState([
     { 
       id: 'exterior',
-      name: 'Exterior Wash', 
-      price: 30, 
-      duration: '1 hour',
-      description: 'Complete exterior cleaning and protection'
+      name: 'Exterior Detail', 
+      prices: {
+        sedan: 90,
+        largeSuv: 110,
+        oversized: 120
+      },
+
+      description: ['\n✓Complete exterior cleaning and protection',
+          '\n✓Full rims, tires, exhaust cleaning',
+          '\n✓Pre-wash and foam bath',
+          '\n✓Complete dry',
+          '\n✓Ceramic wax application',
+          '\n✓Tire shine application'
+        ].join('\n'),
+      addOns: [
+       { name: 'Ceramic Coating', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, },
+       { name: 'Paint Correction', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, },
+       { name: 'Clay Bar Treatment', prices: { sedan: 20, largeSuv: 30, oversized: 40 },  }
+      ]
     },
     { 
       id: 'interior',
-      name: 'Interior Service', 
-      price: 50, 
-      duration: '2 hours',
-      description: 'Deep cleaning for your vehicle interior'
+      name: 'Interior Detail', 
+      prices: {
+        sedan: 120,
+        largeSuv: 150,
+        oversized: 170
+      },
+     
+      description: [
+      ' \n✓Vacuuming on seats and flooring ' ,
+      ' \n✓Deep cleaning for your vehicle interior ', 
+      ' \n✓Tornador Blast for hard to reach areas ',
+      ' \n✓Full steam cleaning ' ,
+      ' \n✓Mats cleaned and restored ',
+      ' \n✓streakless windows and mirrors '
+    ].join('\n'),
+      addOns: [
+        { name: 'Pet hair removal', prices: { sedan: 30, largeSuv: 30, oversized: 30 }, },
+        { name: 'Odor Elimination', prices: { sedan: 20, largeSuv: 20, oversized: 20 }, },
+        { name: 'Seat Shampoo and Extraction', prices: { sedan: 50, largeSuv: 50, oversized: 50 }, },
+        { name: 'Fabric Protection', prices: { sedan: 20, largeSuv: 25, oversized: 30 },  }
+      ]
     },
     { 
       id: 'full',
       name: 'Full Detail', 
-      price: 75, 
-      duration: '3 hours',
-      description: 'Complete interior and exterior detailing'
+      prices: {
+        sedan: 199,
+        largeSuv: 249,
+        oversized: 279
+      },
+      description: '✓Complete interior and exterior detailing combined',
+      addOns: [
+        { name: 'Pet hair removal', prices: { sedan: 30, largeSuv: 30, oversized: 30  },},
+        { name: 'Odor Elimination', prices: { sedan: 20, largeSuv: 20, oversized: 20 }, },
+        { name: 'Fabric Protection', prices: { sedan: 20, largeSuv: 25, oversized: 30 }, },
+        { name: 'Seat Shampoo and Extraction', prices: { sedan: ' starts at 50', largeSuv:' starts at 50', oversized:' starts at 50' }, },
+        { name: 'Clay Bar Treatment', prices: { sedan: 50, largeSuv: 50, oversized: 50 },},
+        { name: 'Paint Correction', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, },
+        { name: 'Ceramic Coating', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, }
+      
+      ]
     },
-    { 
-      id: 'ceramic',
-      name: 'Ceramic Coating', 
-      price: 100, 
-      duration: '1 day',
-      description: 'Premium long-lasting paint protection'
-    }
+    
   ]);
 
   const [times] = useState([
@@ -124,6 +167,18 @@ const Booking = () => {
     }));
   };
 
+  const toggleAddOn = (addOn) => {
+    const newAddOns = selectedAddOns.includes(addOn.name)
+      ? selectedAddOns.filter(item => item !== addOn.name)
+      : [...selectedAddOns, addOn.name];
+    
+    setSelectedAddOns(newAddOns);
+    setFormData(prev => ({
+      ...prev,
+      addOns: newAddOns
+    }));
+  };
+
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
@@ -160,7 +215,8 @@ const Booking = () => {
         ...formData,
         vehicleImages,
         status: 'confirmed',
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
+        totalPrice: totalPrice
       };
 
       await addDoc(collection(db, 'bookings'), bookingData);
@@ -170,13 +226,16 @@ const Booking = () => {
         email: '',
         phone: '',
         vehicle: '',
-        service: 'Exterior Wash',
+        vehicleSize: '',
+        service: '',
         date: '',
         time: '09:00',
-        notes: ''
+        notes: '',
+        addOns: []
       });
       setVehicleImages([]);
       setSelectedDate(null);
+      setSelectedAddOns([]);
       
       setBookingComplete(true);
       setTimeout(() => {
@@ -194,7 +253,7 @@ const Booking = () => {
 
   const canProceedToNext = () => {
     switch (currentStep) {
-      case 1: return formData.service !== '';
+      case 1: return formData.service !== '' && formData.vehicleSize !== '';
       case 2: return selectedDate !== null;
       case 3: return formData.time !== '';
       case 4: return formData.name && formData.email && formData.phone;
@@ -202,7 +261,12 @@ const Booking = () => {
     }
   };
 
-  const totalPrice = services.find(s => s.name === formData.service)?.price || 0;
+  const totalPrice = (services.find(s => s.name === formData.service)?.prices[formData.vehicleSize] || 0) + 
+    selectedAddOns.reduce((sum, addOnName) => {
+      const service = services.find(s => s.name === formData.service);
+      const addOn = service?.addOns.find(a => a.name === addOnName);
+      return sum + (addOn?.prices[formData.vehicleSize] || 0);
+    }, 0);
 
   if (bookingComplete) {
     return (
@@ -214,6 +278,14 @@ const Booking = () => {
           <div className="confirmation-details">
             <p>Date: {selectedDate && moment(selectedDate).format('MMMM Do YYYY')}</p>
             <p>Time: {formData.time}</p>
+            <p>Vehicle Size: {
+              formData.vehicleSize === 'sedan' ? 'Sedan/Mid SUV' :
+              formData.vehicleSize === 'largeSuv' ? 'Large SUV' : 'Oversized'
+            }</p>
+            <p>Service: {formData.service}</p>
+            {selectedAddOns.length > 0 && (
+              <p>Add-Ons: {selectedAddOns.join(', ')}</p>
+            )}
             <p>Total: ${totalPrice}</p>
           </div>
         </div>
@@ -245,32 +317,101 @@ const Booking = () => {
         ))}
       </div>
 
-      <div className="booking-layout">
+       <div className="booking-layout">
         <div className="booking-steps">
           {currentStep === 1 && (
             <div className="booking-card">
               <div className="card-header">
                 <div className="card-title">
                   <MagicIcon />
-                  <span>Select Services</span>
+                  <span>Select Your Vehicle Type & Service</span>
+                  <br></br>
+                   <MagicIcon />
+                  <p>Scroll To The Bottom For Add-Ons</p>
                 </div>
               </div>
               <div className="card-content">
+                <div className="vehicle-size-buttons">
+                  <button
+                    className={`size-btn ${formData.vehicleSize === 'sedan' ? 'selected' : ''}`}
+                    onClick={() => setFormData(prev => ({...prev, vehicleSize: 'sedan'}))}
+                  >
+                    Sedan / Mid SUV
+                    <span className="size-examples">(Cars, Crossovers, Small SUVs)</span>
+                  </button>
+                  <button
+                    className={`size-btn ${formData.vehicleSize === 'largeSuv' ? 'selected' : ''}`}
+                    onClick={() => setFormData(prev => ({...prev, vehicleSize: 'largeSuv'}))}
+                  >
+                    Large SUV
+                    <span className="size-examples">(Full-size SUVs, Large Vehicles)</span>
+                  </button>
+                  <button
+                    className={`size-btn ${formData.vehicleSize === 'oversized' ? 'selected' : ''}`}
+                    onClick={() => setFormData(prev => ({...prev, vehicleSize: 'oversized'}))}
+                  >
+                    Oversized
+                    <span className="size-examples">(Trucks, Vans, XL Vehicles)</span>
+                  </button>
+                </div>
+
                 <div className="service-options">
                   {services.map((service) => (
                     <div 
                       key={service.id}
                       className={`service-option ${formData.service === service.name ? 'selected' : ''}`}
-                      onClick={() => setFormData(prev => ({...prev, service: service.name}))}
+                      onClick={() => {
+                        setFormData(prev => ({...prev, service: service.name}));
+                        setSelectedAddOns([]);
+                      }}
                     >
                       <h3>{service.name}</h3>
-                      <p>{service.description}</p>
+                      <div className="service-description">
+        {service.description.split('\n').map((line, index) => (
+          <div key={index}>{line}</div>
+        ))}
+      </div>
                       <div className="service-price">
-                        ${service.price} • {service.duration}
+                        ${service.prices[formData.vehicleSize]} • {service.duration}
                       </div>
                     </div>
                   ))}
                 </div>
+
+                {formData.service && (
+                  <div className="add-ons-section">
+                    <div className="add-ons-header">
+                      <h4>Premium Upgrades</h4>
+                      <p>Enhance your service with these premium options</p>
+                    </div>
+                    <div className="add-ons-grid">
+                      {services
+                        .find(s => s.name === formData.service)
+                        ?.addOns.map((addOn, i) => (
+                          <div
+                            key={i}
+                            className={`add-on-card ${selectedAddOns.includes(addOn.name) ? 'selected' : ''}`}
+                            onClick={() => toggleAddOn(addOn)}
+                          >
+                            <div className="add-on-checkbox">
+                              {selectedAddOns.includes(addOn.name) && (
+                                <svg viewBox="0 0 24 24">
+                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                </svg>
+                              )}
+                            </div>
+                            <div className="add-on-content">
+                              <h5>{addOn.name}</h5>
+                              <p className="add-on-desc">{addOn.description}</p>
+                              <span className="add-on-price">
+                                +${addOn.prices[formData.vehicleSize]}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -425,26 +566,6 @@ const Booking = () => {
                       rows={3}
                     />
                   </div>
-
-                  {/*<div className="form-group">
-                    <label htmlFor="images">Upload Vehicle Photos (Optional)</label>
-                    <input
-                      type="file"
-                      id="images"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageUpload}
-                      disabled={uploadingImages}
-                    />
-                    {uploadingImages && <p>Uploading images...</p>}
-                    {vehicleImages.length > 0 && (
-                      <div className="vehicle-images">
-                        {vehicleImages.map((img, index) => (
-                          <img key={index} src={img} alt={`Vehicle ${index}`} />
-                        ))}
-                      </div>
-                    )}
-                  </div>*/}
                 </form>
               </div>
             </div>
@@ -457,13 +578,41 @@ const Booking = () => {
               <div className="summary-title">Booking Summary</div>
             </div>
             <div className="summary-content">
+              {formData.vehicleSize && (
+                <div className="summary-section">
+                  <h4>Vehicle Size</h4>
+                  <p>
+                    {formData.vehicleSize === 'sedan' ? 'Sedan/Mid SUV' :
+                     formData.vehicleSize === 'largeSuv' ? 'Large SUV' : 'Oversized'}
+                  </p>
+                </div>
+              )}
+
               {formData.service && (
                 <div className="summary-section">
                   <h4>Service</h4>
                   <div className="service-summary">
                     <span>{formData.service}</span>
-                    <span>${totalPrice}</span>
+                    <span>${services.find(s => s.name === formData.service)?.prices[formData.vehicleSize] || 0}</span>
                   </div>
+                </div>
+              )}
+
+              {selectedAddOns.length > 0 && (
+                <div className="summary-section">
+                  <h4>Add-Ons</h4>
+                  <ul className="add-ons-list">
+                    {selectedAddOns.map((addOnName, i) => {
+                      const service = services.find(s => s.name === formData.service);
+                      const addOn = service?.addOns.find(a => a.name === addOnName);
+                      return (
+                        <li key={i}>
+                          <span>{addOnName}</span>
+                          <span>+${addOn?.prices[formData.vehicleSize] || 0}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               )}
 

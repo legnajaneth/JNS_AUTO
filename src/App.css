@@ -2,25 +2,42 @@
 
 .App {
   text-align: center;
-  background-image: url(./images/backgrndimg.jpg);
-  background-size: cover;
   opacity: .9;
+  background-color: #111111;
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
 }
-
+body{
+  overflow: visible !important;
+  margin: 0;
+  padding: 0;
+}
 /* Header Styles */
 header {
   align-items: center;
-  color: #61dafb;
+  color: #fb6161;
   font-size: 1em;
+}
+.content-container {
+  position: relative;
+  z-index: 1; /* Ensures content appears above the SilkBackground */
+  flex: 1;
+}
+canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+ 
 }
 
 .App-link {
-  color: #61dafb;
+  color: #940505;
 }
 
 /* ============ ENHANCED FOOTER STYLES ============ */
@@ -57,7 +74,7 @@ footer {
 
 .footer-section h3 {
   font-size: 1.2rem; /* Slightly larger for section titles */
-  color: #add8e6;
+  color: #880303;
   margin-bottom: 1rem;
   position: relative;
   padding-bottom: 0.5rem;
@@ -72,7 +89,7 @@ footer {
   transform: translateX(-50%);
   width: 50px;
   height: 2px;
-  background: rgba(173, 216, 230, 0.5);
+  background: rgba(230, 173, 173, 0.5);
 }
 
 .footer-section p, 
@@ -116,7 +133,7 @@ footer {
 }
 
 .quick-links a:hover {
-  color: #add8e6;
+  color: #e6adad;
   text-decoration: underline;
 }
 
@@ -176,7 +193,7 @@ footer {
   height: 100%;
   width: 100%;
   border: 1px solid #fff;
-  box-shadow: 0px 0px 8px rgba(24, 131, 167, 0.363);
+  box-shadow: 0px 0px 8px rgba(167, 24, 24, 0.363);
   border-radius: 5px;
   transition: all 0.3s;
 }
@@ -219,12 +236,12 @@ footer {
 
 /* ============ REST OF YOUR STYLES ============ */
 :root {
-  --primary: #61dafb;
-  --secondary: #0f468f;
+  --primary: #fb6161;
+  --secondary: #8f0f0f;
   --dark: #111111;
   --light: #f8f9fa;
   --text: #ffffff;
-  --accent: #5391cc;
+  --accent: #cc5353;
   --transition: all 0.3s ease;
 }
 
