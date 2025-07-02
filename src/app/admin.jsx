@@ -8,11 +8,12 @@ import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, serverTimestamp
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiImage, FiX, FiBell, FiMail, FiSun, FiMoon, FiHome, FiCalendar, FiUsers, FiDollarSign, FiPieChart, FiSettings, FiChevronRight, FiStar, FiClock, FiCheckCircle, FiAlertCircle, FiTrash2, FiSearch } from 'react-icons/fi';
+import { FiRefreshCcw, FiMenu, FiImage, FiX, FiBell, FiMail, FiSun, FiMoon, FiHome, FiCalendar, FiUsers, FiDollarSign, FiPieChart, FiSettings, FiChevronRight, FiStar, FiClock, FiCheckCircle, FiAlertCircle, FiTrash2, FiSearch } from 'react-icons/fi';
 import { FaCar, FaWater, FaSprayCan, FaShieldAlt } from 'react-icons/fa';
 import AdminReviews from './AdminReviews';
 import AdminInquiries from './AdminInquiries';
 import './admin.css';
+import AdminCalendar from '../components/AdminCalendar';
 
 const localizer = momentLocalizer(moment);
 
@@ -103,18 +104,18 @@ const AdminPage = () => {
           
           // If no imageUrls but we have images paths, try to get URLs
           if (imageUrls.length === 0 && data.images && data.images.length > 0) {
-            imageUrls = await Promise.all(
-              data.images.map(async (imagePath) => {
-                try {
-                  const imageRef = ref(storage, imagePath);
-                  return await getDownloadURL(imageRef);
-                } catch (error) {
-                  console.error("Error loading image:", error);
-                  return null;
-                }
-              })
-            );
-            imageUrls = imageUrls.filter(url => url !== null);
+              imageUrls = await Promise.all(
+                data.images.map(async (imagePath) => {
+                  try {
+                    const imageRef = ref(storage, imagePath);
+                    return await getDownloadURL(imageRef);
+                  } catch (error) {
+                    console.error("Error loading image:", error);
+                    return null;
+                  }
+                })
+              );
+              imageUrls = imageUrls.filter(url => url !== null);
           }
           
           return {
@@ -166,6 +167,36 @@ const AdminPage = () => {
     const totalRating = bookings.reduce((sum, booking) => sum + (booking.review?.rating || 0), 0);
     return Math.round((totalRating / totalReviews) * 20);
   };
+
+const [reviews, setReviews] = useState([]);
+const fetchReviews = async () => {
+  try {
+    const snapshot = await getDocs(collection(db, 'reviews'));
+    const reviewsData = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      date: doc.data().timestamp?.toDate() || new Date()
+    }));
+    setReviews(reviewsData.sort((a, b) => b.date - a.date));
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+  }
+};
+
+const getRecentReviews = () => {
+  return [...reviews]
+    .filter(review => review && (review.rating || review.comment)) // Filter out invalid reviews
+    .sort((a, b) => (b.date || 0) - (a.date || 0))
+    .slice(0, 4)
+    .map(review => ({
+      id: review.id || Math.random().toString(),
+      name: review.name || 'Anonymous',
+      rating: review.rating || 0,
+      comment: review.comment,
+      service: review.service,
+      date: review.date || new Date()
+    }));
+};
 
   const generateRevenueData = (bookings) => {
     const monthlyData = {};
@@ -423,6 +454,37 @@ const AdminPage = () => {
       console.error('Error updating booking:', error);
     }
   };
+const handleSelectSlot = (slotInfo) => {
+  setModalType('add');
+  setFormData({
+    name: '',
+    email: '',
+    phone: '',
+    vehicle: '',
+    service: 'Exterior Wash',
+    date: slotInfo.start,
+    time: '09:00',
+    notes: '',
+    status: 'confirmed'
+  });
+  setShowModal(true);
+};
+
+const handleDateClick = (date) => {
+  setModalType('add');
+  setFormData({
+    name: '',
+    email: '',
+    phone: '',
+    vehicle: '',
+    service: 'Exterior Wash',
+    date: date,
+    time: '09:00',
+    notes: '',
+    status: 'confirmed'
+  });
+  setShowModal(true);
+};
 
   const handleDeleteBooking = async () => {
     try {
@@ -592,6 +654,8 @@ const AdminPage = () => {
                   </ResponsiveContainer>
                 </div>
               </div>
+            </div>
+          
 
               {/* Recent Appointments */}
               <div className="recent-appointments">
@@ -627,86 +691,132 @@ const AdminPage = () => {
 
               {/* Calendar */}
               <div className="calendar-container">
-                <div className="calendar-header">
-                  <h2 className="calendar-title">Booking Calendar</h2>
-                  <div className="calendar-actions">
-                    <div className="calendar-view-toggle">
-                      <button 
-                        className={`btn btn-outline ${calendarView === 'month' ? 'active' : ''}`}
-                        onClick={() => setCalendarView('month')}
-                      >
-                        Month
-                      </button>
-                      <button 
-                        className={`btn btn-outline ${calendarView === 'week' ? 'active' : ''}`}
-                        onClick={() => setCalendarView('week')}
-                      >
-                        Week
-                      </button>
-                      <button 
-                        className={`btn btn-outline ${calendarView === 'day' ? 'active' : ''}`}
-                        onClick={() => setCalendarView('day')}
-                      >
-                        Day
-                      </button>
-                    </div>
-                    <button 
-                      className="btn btn-primary"
-                      onClick={() => {
-                        setModalType('add');
-                        setFormData({
-                          name: '',
-                          email: '',
-                          phone: '',
-                          vehicle: '',
-                          service: 'Exterior Wash',
-                          date: '',
-                          time: '09:00',
-                          notes: '',
-                          status: 'confirmed'
-                        });
-                        setShowModal(true);
-                      }}
-                    >
-                      + Add Appointment
-                    </button>
-                  </div>
-                </div>
-                <div className="calendar-wrapper">
-                  <Calendar
-                    localizer={localizer}
-                    events={bookings}
-                    startAccessor="start"
-                    endAccessor="end"
-                    onSelectEvent={handleSelectBooking}
-                    defaultView={calendarView}
-                    view={calendarView}
-                    onView={setCalendarView}
-                    views={['month', 'week', 'day']}
-                    style={{ height: '100%' }}
-                    eventPropGetter={(event) => ({
-                      style: {
-                        backgroundColor: getServiceColor(event.service),
-                        borderRadius: '4px',
-                        opacity: 0.9,
-                        color: 'white',
-                        border: 'none',
-                        fontSize: '0.8em',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                      }
-                    })}
-                    components={{
-                      event: ({ event }) => (
-                        <div className="rbc-event-content">
-                          <div className="event-service">{event.service}</div>
-                          <div className="event-customer">{event.name}</div>
-                        </div>
-                      )
-                    }}
-                  />
-                </div>
-              </div>
+  <div className="calendar-header">
+    <h2 className="calendar-title">Admin Calendar</h2>
+    <div className="calendar-actions">
+      <div className="calendar-view-toggle">
+        <button 
+          className={`btn btn-outline ${calendarView === 'month' ? 'active' : ''}`}
+          onClick={() => setCalendarView('month')}
+        >
+          Month
+        </button>
+        <button 
+          className={`btn btn-outline ${calendarView === 'week' ? 'active' : ''}`}
+          onClick={() => setCalendarView('week')}
+        >
+          Week
+        </button>
+        <button 
+          className={`btn btn-outline ${calendarView === 'day' ? 'active' : ''}`}
+          onClick={() => setCalendarView('day')}
+        >
+          Day
+        </button>
+      </div>
+      <button 
+        className="btn btn-primary"
+        onClick={() => {
+          setModalType('add');
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            vehicle: '',
+            service: 'Exterior Detail',
+            date: new Date(),
+            time: '09:00',
+            notes: '',
+            status: 'confirmed'
+          });
+          setShowModal(true);
+        }}
+      >
+        + Add Appointment
+      </button>
+    </div>
+  </div>
 
+  <div className="calendar-wrapper">
+    <AdminCalendar
+      events={bookings}
+      onSelectEvent={handleSelectBooking}
+      onSelectSlot={handleSelectSlot}
+      view={calendarView}
+      onView={setCalendarView}
+      onNavigate={(date, view) => {
+        setCalendarView(view);
+      }}
+    />
+  </div>
+</div>
+
+{/* Recent Reviews Preview */}
+<div className="recent-reviews-preview">
+  <div className="recent-reviews-header">
+  <h3 className="recent-reviews-title">
+    <FiStar /> Recent Reviews
+  </h3>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <button 
+      onClick={fetchReviews}
+      style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+    >
+      <FiRefreshCcw className="refresh-icon" />
+    </button>
+    <div 
+      className="recent-reviews-view-all"
+      onClick={() => setActiveTab(TABS.REVIEWS)}
+    >
+      View All <FiChevronRight />
+    </div>
+  </div>
+</div>
+  
+  <div className="recent-reviews-grid">
+    {getRecentReviews().map((review) => (
+      <div 
+        key={review.id}
+        className="recent-review-card"
+        onClick={() => setActiveTab(TABS.REVIEWS)}
+      >
+        <div className="recent-review-header">
+          <div className="recent-review-rating">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <FiStar 
+                key={i} 
+                className={`star ${i < (review.rating || 0) ? 'filled' : ''}`}
+              />
+            ))}
+          </div>
+          <span className="recent-review-date">
+            {new Date(review.date).toLocaleDateString()}
+          </span>
+        </div>
+        
+        <h4 className="recent-review-name">{review.name}</h4>
+        
+        <p className="recent-review-comment">
+          {review.comment || 'No comment provided'}
+        </p>
+        
+        {review.service && (
+          <div className="recent-review-service">
+            <span className="service-tag">
+              {review.service}
+            </span>
+          </div>
+        )}
+      </div>
+    ))}
+    
+    {reviews.length === 0 && (
+      <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+        No recent reviews
+      </div>
+    )}
+  </div>
+</div>
               {/* Popular Services */}
               <div className="popular-services">
                 <div className="services-header">
@@ -886,7 +996,6 @@ const AdminPage = () => {
                   ))}
                 </div>
               </div>
-            </div>
           </>
         );
         

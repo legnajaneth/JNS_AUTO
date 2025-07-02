@@ -11,16 +11,30 @@ const ReviewsCarousel = () => {
   const [direction, setDirection] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-const getVisibleReviews = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+ const getVisibleReviews = () => {
+    // Show only 1 review on mobile, 3 on desktop
+    const count = isMobile ? 1 : 3;
     const visibleReviews = [];
-    for (let i = 0; i < 3; i++) {
+    
+    for (let i = 0; i < count; i++) {
       const index = (currentIndex + i) % approvedReviews.length;
       visibleReviews.push(approvedReviews[index]);
     }
     return visibleReviews;
   };
-
+  
   useEffect(() => {
     const fetchApprovedReviews = async () => {
       try {
@@ -125,48 +139,46 @@ const getVisibleReviews = () => {
     );
   }
 
-  return (
+ return (
     <div className="reviews-carousel-container">
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
-          key={approvedReviews[currentIndex]?.id || 'empty'}
+          key={`review-${currentIndex}`}
           custom={direction}
           initial={{ opacity: 0, x: direction > 0 ? 100 : -100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: direction > 0 ? -100 : 100 }}
-          transition={{ duration: 0.5 }}
-          className="review-card-container"
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="glass-card"
         >
-          <div className="reviews-group">
-            {getVisibleReviews().map((review, i) => (
-              <div key={`${review.id}-${i}`} className="review-card">
-                <FaQuoteLeft className="quote-icon" />
-                <p className="review-text">
-                  "{review?.comment || 'No review text available'}"
-                </p>
-                <div className="review-footer">
-                  <div className="reviewer-info">
-                    <h4>{review?.name || 'Anonymous'}</h4>
-                    <div className="review-stars">
-                      {[...Array(5)].map((_, starIdx) => (
-                        <FaStar 
-                          key={starIdx}
-                          className={starIdx < (review?.rating || 0) ? 'filled' : ''}
-                        />
-                      ))}
-                    </div>
-                    <span className="review-date">
-                      {review?.timestamp?.toLocaleDateString() || ''}
-                    </span>
+          {getVisibleReviews().map((review, i) => (
+            <div key={`${review.id}-${i}`} className="review-card">
+              <FaQuoteLeft className="quote-icon" />
+              <p className="review-text">
+                "{review?.comment || 'No review text available'}"
+              </p>
+              <div className="review-footer">
+                <div className="reviewer-info">
+                  <h4>{review?.name || 'Anonymous'}</h4>
+                  <div className="review-stars">
+                    {[...Array(5)].map((_, starIdx) => (
+                      <FaStar 
+                        key={starIdx}
+                        className={starIdx < (review?.rating || 0) ? 'filled' : ''}
+                      />
+                    ))}
                   </div>
+                  <span className="review-date">
+                    {review?.timestamp?.toLocaleDateString() || ''}
+                  </span>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </motion.div>
       </AnimatePresence>
       
-      {approvedReviews.length > 1 && (
+      {approvedReviews.length > (isMobile ? 1 : 3) && (
         <div className="carousel-controls">
           <button 
             className="nav-button" 
@@ -177,15 +189,16 @@ const getVisibleReviews = () => {
           </button>
           
           <div className="carousel-dots">
-            {approvedReviews.map((_, index) => (
+            {Array.from({ length: Math.ceil(approvedReviews.length / (isMobile ? 1 : 3)) }).map((_, index) => (
               <button
                 key={index}
-                className={`dot ${index === currentIndex ? 'active' : ''}`}
+                className={`dot ${index === Math.floor(currentIndex / (isMobile ? 1 : 3)) ? 'active' : ''}`}
                 onClick={() => {
-                  setDirection(index > currentIndex ? 1 : -1);
-                  setCurrentIndex(index);
+                  const newIndex = index * (isMobile ? 1 : 3);
+                  setDirection(newIndex > currentIndex ? 1 : -1);
+                  setCurrentIndex(newIndex);
                 }}
-                aria-label={`Go to review ${index + 1}`}
+                aria-label={`Go to review set ${index + 1}`}
               />
             ))}
           </div>

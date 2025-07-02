@@ -348,6 +348,7 @@ body {
 
 /* ================ Main Content Area ================ */
 .content {
+  margin-top: auto;
   margin-left: var(--sidebar-width);
   width: calc(100% - var(--sidebar-width));
   min-height: 100vh;
@@ -1253,6 +1254,7 @@ body {
 
 /* ================ Calendar Section ================ */
 .calendar-container {
+  height: calc(100vh - var(--header-height) - 4rem);
   grid-column: span 8;
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
@@ -1287,9 +1289,127 @@ body {
   height: 500px;
 }
 
+.calendar-section{
+  height: 900px;
+}
+
+.selected-date {
+  margin-top: 30px;
+}
+/* Recent Reviews Preview */
+.recent-reviews-preview {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--card-shadow);
+}
+
+.recent-reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.recent-reviews-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.recent-reviews-view-all {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.recent-reviews-view-all:hover {
+  opacity: 0.8;
+}
+
+.recent-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.recent-review-card {
+  background: var(--card-bg-secondary);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.recent-review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recent-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.recent-review-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.recent-review-rating .star {
+  color: var(--gray-300);
+}
+
+.recent-review-rating .star.filled {
+  color: var(--yellow-400);
+}
+
+.recent-review-date {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.recent-review-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.recent-review-comment {
+  font-size: 14px;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.recent-review-service .service-tag {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 /* Calendar Overrides */
 .rbc-calendar {
-  height: 100%;
+  height: 700px!important;
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
 }
@@ -1301,12 +1421,24 @@ body {
   border-bottom: 1px solid var(--border-color) !important;
 }
 
-.rbc-day-bg + .rbc-day-bg {
-  border-left: 1px solid var(--border-color) !important;
+.rbc-month-view {
+  height: 100%;
+  border: none !important;
 }
 
-.rbc-month-view {
-  border: none !important;
+.rbc-date-cell {
+  padding: 4px;
+  height: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rbc-date-cell:hover {
+  background-color: rgba(var(--primary-500), 0.1);
+}
+
+.rbc-month-row {
+  min-height: 100px;
 }
 
 .rbc-off-range-bg {
@@ -1773,6 +1905,9 @@ textarea {
 }
 
 @media (max-width: 992px) {
+  .header{
+    margin-top: 70px;
+  }
   .mobile-sidebar-toggle {
     display: flex;
   }
@@ -1801,6 +1936,9 @@ textarea {
 }
 
 @media (max-width: 768px) {
+  .header{
+    margin-top: 70px;
+  }
   .stats-card {
     grid-column: span 12;
   }
@@ -1842,6 +1980,9 @@ textarea {
 }
 
 @media (max-width: 576px) {
+  .header{
+    margin-top: 70px;
+  }
   .chart-actions {
     flex-wrap: wrap;
   }

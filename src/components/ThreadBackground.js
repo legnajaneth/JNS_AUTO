@@ -121,6 +121,7 @@ void main() {
 `;
 
 const Threads = ({
+  quality = 'medium',
   color = [4, 1, 1],
   amplitude = 1.5,
   distance = .5,
@@ -190,7 +191,14 @@ const Threads = ({
       container.addEventListener("mouseleave", handleMouseLeave);
     }
 
+    let lastTime = 0;
     function update(t) {
+       if (t - lastTime < 16) { // ~60fps
+        animationFrameId.current = requestAnimationFrame(update);
+        return;
+      }
+      lastTime = t;
+
       if (enableMouseInteraction) {
         const smoothing = 0.05;
         currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0]);

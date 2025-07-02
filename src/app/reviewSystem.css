@@ -1,5 +1,5 @@
 /* Glass Morphism Base Styles */
-.glass-card {
+.glass-card-review-form {
   margin-top: 160px;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
@@ -9,6 +9,9 @@
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   overflow: hidden;
   transition: all 0.3s ease;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
 }
 
 .glass-card:hover {
@@ -161,11 +164,16 @@
 
 /* Thank You Message */
 .review-thank-you {
-  text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   max-width: 500px;
-  margin: 0 auto;
+  margin: 2rem auto;
+  margin-top: 250px;
+  margin-bottom: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 
 .checkmark-circle {
   width: 80px;

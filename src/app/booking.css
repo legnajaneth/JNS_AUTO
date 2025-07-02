@@ -580,8 +580,33 @@
 }
 
 .confirmation-details {
-  margin-top: 1.5rem;
-  color: #ccc;
+  text-align: left;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+.detail-row.total {
+  font-weight: bold;
+  border-top: 2px solid #ddd;
+  border-bottom: none;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+.detail-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.detail-value {
+  text-align: right;
 }
 
 /* Status messages */

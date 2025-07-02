@@ -1,15 +1,12 @@
-/* eslint-disable no-unused-vars */
+//* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../firebase/firebaseConfig';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { serverTimestamp } from 'firebase/firestore';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import BookingCalendar from '../components/BookingCalendar';
 import './booking.css';
-
-const localizer = momentLocalizer(moment);
 
 // Emoji icon components
 const CalendarIcon = () => <span className="card-icon">📅</span>;
@@ -46,6 +43,16 @@ const Booking = () => {
   const [status, setStatus] = useState({ type: '', message: '' });
   const [selectedAddOns, setSelectedAddOns] = useState([]);
 
+  const formatTimeDisplay = (time) => {
+  if (!time) return '';
+
+  if (time.includes('am') || time.includes('pm')) return time;
+  const [hours, minutes] = time.split(':');
+  const period = parseInt(hours) >= 12 ? 'pm' : 'am';
+  const displayHours = parseInt(hours) % 12 || 12;
+  return `${displayHours}:${minutes.padStart(2, '0')}${period}`;
+};
+
   // Services data with add-ons and tiered pricing
   const [services] = useState([
     { 
@@ -56,7 +63,6 @@ const Booking = () => {
         largeSuv: 110,
         oversized: 120
       },
-
       description: ['\n✓Complete exterior cleaning and protection',
           '\n✓Full rims, tires, exhaust cleaning',
           '\n✓Pre-wash and foam bath',
@@ -65,9 +71,9 @@ const Booking = () => {
           '\n✓Tire shine application'
         ].join('\n'),
       addOns: [
-       { name: 'Ceramic Coating', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, },
-       { name: 'Paint Correction', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, },
-       { name: 'Clay Bar Treatment', prices: { sedan: 20, largeSuv: 30, oversized: 40 },  }
+       { name: 'Ceramic Coating', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' } },
+       { name: 'Paint Correction', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' } },
+       { name: 'Clay Bar Treatment', prices: { sedan: 20, largeSuv: 30, oversized: 40 } }
       ]
     },
     { 
@@ -78,20 +84,19 @@ const Booking = () => {
         largeSuv: 150,
         oversized: 170
       },
-     
       description: [
-      ' \n✓Vacuuming on seats and flooring ' ,
-      ' \n✓Deep cleaning for your vehicle interior ', 
-      ' \n✓Tornador Blast for hard to reach areas ',
-      ' \n✓Full steam cleaning ' ,
-      ' \n✓Mats cleaned and restored ',
-      ' \n✓streakless windows and mirrors '
-    ].join('\n'),
+        ' \n✓Vacuuming on seats and flooring',
+        ' \n✓Deep cleaning for your vehicle interior', 
+        ' \n✓Tornador Blast for hard to reach areas',
+        ' \n✓Full steam cleaning',
+        ' \n✓Mats cleaned and restored',
+        ' \n✓streakless windows and mirrors'
+      ].join('\n'),
       addOns: [
-        { name: 'Pet hair removal', prices: { sedan: 30, largeSuv: 30, oversized: 30 }, },
-        { name: 'Odor Elimination', prices: { sedan: 20, largeSuv: 20, oversized: 20 }, },
-        { name: 'Seat Shampoo and Extraction', prices: { sedan: 50, largeSuv: 50, oversized: 50 }, },
-        { name: 'Fabric Protection', prices: { sedan: 20, largeSuv: 25, oversized: 30 },  }
+        { name: 'Pet hair removal', prices: { sedan: 30, largeSuv: 30, oversized: 30 } },
+        { name: 'Odor Elimination', prices: { sedan: 20, largeSuv: 20, oversized: 20 } },
+        { name: 'Seat Shampoo and Extraction', prices: { sedan: 50, largeSuv: 50, oversized: 50 } },
+        { name: 'Fabric Protection', prices: { sedan: 20, largeSuv: 25, oversized: 30 } }
       ]
     },
     { 
@@ -104,23 +109,92 @@ const Booking = () => {
       },
       description: '✓Complete interior and exterior detailing combined',
       addOns: [
-        { name: 'Pet hair removal', prices: { sedan: 30, largeSuv: 30, oversized: 30  },},
-        { name: 'Odor Elimination', prices: { sedan: 20, largeSuv: 20, oversized: 20 }, },
-        { name: 'Fabric Protection', prices: { sedan: 20, largeSuv: 25, oversized: 30 }, },
-        { name: 'Seat Shampoo and Extraction', prices: { sedan: ' starts at 50', largeSuv:' starts at 50', oversized:' starts at 50' }, },
-        { name: 'Clay Bar Treatment', prices: { sedan: 50, largeSuv: 50, oversized: 50 },},
-        { name: 'Paint Correction', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, },
-        { name: 'Ceramic Coating', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' }, }
-      
+        { name: 'Pet hair removal', prices: { sedan: 30, largeSuv: 30, oversized: 30 } },
+        { name: 'Odor Elimination', prices: { sedan: 20, largeSuv: 20, oversized: 20 } },
+        { name: 'Fabric Protection', prices: { sedan: 20, largeSuv: 25, oversized: 30 } },
+        { name: 'Seat Shampoo and Extraction', prices: { sedan: ' starts at 50', largeSuv:' starts at 50', oversized:' starts at 50' } },
+        { name: 'Clay Bar Treatment', prices: { sedan: 50, largeSuv: 50, oversized: 50 } },
+        { name: 'Paint Correction', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' } },
+        { name: 'Ceramic Coating', prices: { sedan: 'contact for quote', largeSuv: 'contact for quote', oversized:'contact for quote' } }
       ]
-    },
-    
+    }
   ]);
 
   const [times] = useState([
     '06:00am','07:00am','08:00am','09:00am', '10:00am', '11:00am', '12:00pm',
     '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm'
   ]);
+  const [bookedTimeSlots, setBookedTimeSlots] = useState({});
+  const [availableTimes, setAvailableTimes] = useState(times);
+  const [blackoutSlots, setBlackoutSlots] = useState({});
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const today = new Date();
+        const q = query(
+          collection(db, 'bookings'),
+          where('date', '>=', moment(today).format('YYYY-MM-DD'))
+        );
+        const snapshot = await getDocs(q);
+        
+        const timeSlotsMap = {};
+        const blackoutSlotsMap = {};
+        
+        snapshot.docs.forEach(doc => {
+          const booking = doc.data();
+          const dateStr = booking.date;
+          const timeStr = booking.time;
+          
+          if (!timeSlotsMap[dateStr]) {
+            timeSlotsMap[dateStr] = new Set();
+            blackoutSlotsMap[dateStr] = new Set();
+          }
+          
+          timeSlotsMap[dateStr].add(timeStr);
+          blackoutSlotsMap[dateStr].add(timeStr);
+          
+          const timeIndex = times.indexOf(timeStr);
+          if (timeIndex !== -1) {
+            for (let i = 0; i <= 2; i++) {
+              const prevTimeIndex = timeIndex - i;
+              if (prevTimeIndex >= 0) {
+                blackoutSlotsMap[dateStr].add(times[prevTimeIndex]);
+              }
+            }
+
+            for (let i = 0; i <= 3; i++) {
+              const nextTimeIndex = timeIndex + i;
+              if (nextTimeIndex < times.length) {
+                blackoutSlotsMap[dateStr].add(times[nextTimeIndex]);
+              }
+            }
+          }
+        });
+        
+        setBookedTimeSlots(timeSlotsMap);
+        setBlackoutSlots(blackoutSlotsMap);
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  // Update available times when date changes
+  useEffect(() => {
+    if (!selectedDate) return;
+
+    const dateStr = moment(selectedDate).format('YYYY-MM-DD');
+    const bookedForDate = bookedTimeSlots[dateStr] || new Set();
+    const blackoutForDate = blackoutSlots[dateStr] || new Set();
+    
+    const filteredTimes = times.filter(time => 
+      !bookedForDate.has(time) && !blackoutForDate.has(time)
+    );
+    setAvailableTimes(filteredTimes);
+  }, [selectedDate, bookedTimeSlots, blackoutSlots]);
 
   useEffect(() => {
     const fetchBlackoutDates = async () => {
@@ -155,16 +229,12 @@ const Booking = () => {
       return;
     }
 
-    if (blackoutDates.some(d => d.toDateString() === date.toDateString())) {
-      setStatus({ type: 'error', message: 'This date is unavailable' });
-      return;
-    }
-
     setStatus({ type: '', message: '' });
     setSelectedDate(date);
     setFormData(prev => ({
       ...prev,
-      date: moment(date).format('YYYY-MM-DD')
+      date: moment(date).format('YYYY-MM-DD'),
+      time: '' // Reset time when date changes
     }));
   };
 
@@ -204,53 +274,29 @@ const Booking = () => {
   };
 
   const handleBookingSubmit = async () => {
-    setStatus({ type: '', message: '' });
+  // Validate required fields
+  if (!formData.name || !formData.email || !formData.phone || !formData.service || !formData.date || !formData.time) {
+    setStatus({ type: 'error', message: 'Please fill in all required fields' });
+    return;
+  }
 
-    if (!formData.date) {
-      setStatus({ type: 'error', message: 'Please select a date' });
-      return;
-    }
+  try {
+    const bookingData = {
+      ...formData,
+      vehicleImages,
+      status: 'confirmed',
+      createdAt: serverTimestamp(),
+      totalPrice: totalPrice
+    };
 
-    try {
-      const bookingData = {
-        ...formData,
-        vehicleImages,
-        status: 'confirmed',
-        createdAt: serverTimestamp(),
-        totalPrice: totalPrice
-      };
-
-      await addDoc(collection(db, 'bookings'), bookingData);
-
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        vehicle: '',
-        vehicleSize: '',
-        service: '',
-        date: '',
-        time: '09:00',
-        notes: '',
-        addOns: []
-      });
-      setVehicleImages([]);
-      setSelectedDate(null);
-      setSelectedAddOns([]);
-      
-      setBookingComplete(true);
-      setTimeout(() => {
-        setCurrentStep(1);
-        setBookingComplete(false);
-      }, 3000);
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      setStatus({ 
-        type: 'error', 
-        message: 'Booking failed. Please try again.' 
-      });
-    }
-  };
+    await addDoc(collection(db, 'bookings'), bookingData);
+    setBookingComplete(true);
+    
+  } catch (error) {
+    console.error('Error creating booking:', error);
+    setStatus({ type: 'error', message: 'Booking failed. Please try again.' });
+  }
+};
 
   const canProceedToNext = () => {
     switch (currentStep) {
@@ -270,29 +316,71 @@ const Booking = () => {
     }, 0);
 
   if (bookingComplete) {
-    return (
-      <div className="booking-container">
-        <div className="booking-confirmation">
-          <CheckIcon className="confirmation-icon" />
-          <h2>Booking Confirmed!</h2>
-          <p>Your appointment has been successfully scheduled.</p>
-          <div className="confirmation-details">
-            <p>Date: {selectedDate && moment(selectedDate).format('MMMM Do YYYY')}</p>
-            <p>Time: {formData.time}</p>
-            <p>Vehicle Size: {
-              formData.vehicleSize === 'sedan' ? 'Sedan/Mid SUV' :
-              formData.vehicleSize === 'largeSuv' ? 'Large SUV' : 'Oversized'
-            }</p>
-            <p>Service: {formData.service}</p>
-            {selectedAddOns.length > 0 && (
-              <p>Add-Ons: {selectedAddOns.join(', ')}</p>
-            )}
-            <p>Total: ${totalPrice}</p>
+  const selectedService = services.find(s => s.name === formData.service);
+  const basePrice = selectedService?.prices[formData.vehicleSize] || 0;
+  
+  return (
+    <div className="booking-container">
+      <div className="booking-confirmation">
+        <div className="confirmation-icon">✓</div>
+        <h2>Booking Confirmed!</h2>
+        <p>Your appointment has been successfully scheduled.</p>
+        
+        <div className="confirmation-details">
+          <div className="detail-row">
+            <span className="detail-label">Service:</span>
+            <span className="detail-value">
+              {formData.service || 'Not specified'} (${typeof basePrice === 'number' ? basePrice.toFixed(2) : basePrice})
+            </span>
+          </div>
+          
+          <div className="detail-row">
+            <span className="detail-label">Date:</span>
+            <span className="detail-value">
+              {formData.date ? moment(formData.date).format('dddd, MMMM Do YYYY') : 'Not specified'}
+            </span>
+          </div>
+          
+          <div className="detail-row">
+            <span className="detail-label">Time:</span>
+            <span className="detail-value">
+              {formData.time ? formatTimeDisplay(formData.time) : 'Not specified'}
+            </span>
+          </div>
+          
+          <div className="detail-row">
+            <span className="detail-label">Vehicle Size:</span>
+            <span className="detail-value">
+              {formData.vehicleSize === 'sedan' ? 'Sedan/Mid SUV' :
+               formData.vehicleSize === 'largeSuv' ? 'Large SUV' : 
+               formData.vehicleSize === 'oversized' ? 'Oversized' : 'Not specified'}
+            </span>
+          </div>
+          
+          {selectedAddOns.length > 0 && (
+            <div className="detail-row">
+              <span className="detail-label">Add-Ons:</span>
+              <span className="detail-value">
+                {selectedAddOns.map(addOn => {
+                  const addOnObj = selectedService?.addOns.find(a => a.name === addOn);
+                  const price = addOnObj?.prices[formData.vehicleSize];
+                  return `${addOn} (${typeof price === 'number' ? `$${price.toFixed(2)}` : price})`;
+                }).join(', ')}
+              </span>
+            </div>
+          )}
+          
+          <div className="detail-row total">
+            <span className="detail-label">Total:</span>
+            <span className="detail-value">
+              ${typeof totalPrice === 'number' ? totalPrice.toFixed(2) : totalPrice}
+            </span>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="booking-container">
@@ -318,7 +406,7 @@ const Booking = () => {
         ))}
       </div>
 
-       <div className="booking-layout">
+      <div className="booking-layout">
         <div className="booking-steps">
           {currentStep === 1 && (
             <div className="booking-card">
@@ -327,7 +415,7 @@ const Booking = () => {
                   <MagicIcon />
                   <span>Select Your Vehicle Type & Service</span>
                   <br></br>
-                   <MagicIcon />
+                  <MagicIcon />
                   <p>Scroll To The Bottom For Add-Ons</p>
                 </div>
               </div>
@@ -368,10 +456,10 @@ const Booking = () => {
                     >
                       <h3>{service.name}</h3>
                       <div className="service-description">
-        {service.description.split('\n').map((line, index) => (
-          <div key={index}>{line}</div>
-        ))}
-      </div>
+                        {service.description.split('\n').map((line, index) => (
+                          <div key={index}>{line}</div>
+                        ))}
+                      </div>
                       <div className="service-price">
                         ${service.prices[formData.vehicleSize]} • {service.duration}
                       </div>
@@ -427,44 +515,10 @@ const Booking = () => {
               </div>
               <div className="card-content">
                 <div className="calendar-section">
-                  <Calendar
-                    localizer={localizer}
-                    events={blackoutDates.map(date => ({
-                      title: 'Booked',
-                      start: date,
-                      end: date,
-                      allDay: true
-                    }))}
-                    startAccessor="start"
-                    endAccessor="end"
-                    selectable
-                    onSelectSlot={(slotInfo) => handleDateSelect(slotInfo.start)}
-                    defaultView="month"
-                    views={['month']}
-                    eventPropGetter={() => ({
-                      style: {
-                        backgroundColor: '#ff6b6b',
-                        borderRadius: '4px',
-                        opacity: 0.8,
-                        color: 'white',
-                        border: 'none'
-                      }
-                    })}
-                    dayPropGetter={(date) => {
-                      const today = new Date();
-                      today.setHours(0, 0, 0, 0);
-                      if (date < today || blackoutDates.some(d => d.toDateString() === date.toDateString())) {
-                        return {
-                          className: 'rbc-disabled-date',
-                          style: {
-                            backgroundColor: 'rgba(255, 107, 107, 0.2)',
-                            cursor: 'not-allowed'
-                          }
-                        };
-                      }
-                      return {};
-                    }}
-                    style={{ height: 400 }}
+                  <BookingCalendar
+                    blackoutDates={blackoutDates}
+                    onDateSelect={handleDateSelect}
+                    selectedDate={selectedDate}
                   />
                   {selectedDate && (
                     <div className="selected-date">
@@ -486,15 +540,35 @@ const Booking = () => {
               </div>
               <div className="card-content">
                 <div className="time-options">
-                  {times.map((time) => (
-                    <button
-                      key={time}
-                      className={`time-option ${formData.time === time ? 'selected' : ''}`}
-                      onClick={() => setFormData(prev => ({...prev, time}))}
-                    >
-                      {time}
-                    </button>
-                  ))}
+                  {selectedDate ? (
+                    times.map((time) => {
+                      const dateStr = moment(selectedDate).format('YYYY-MM-DD');
+                      const isBooked = bookedTimeSlots[dateStr]?.has(time);
+                      const isBlackedOut = blackoutSlots[dateStr]?.has(time);
+                      const isAvailable = !isBooked && !isBlackedOut;
+                      
+                      return (
+                        <button
+                          key={time}
+                          className={`time-option 
+                            ${formData.time === time ? 'selected' : ''}
+                            ${!isAvailable ? 'unavailable' : ''}
+                          `}
+                          onClick={() => isAvailable && setFormData(prev => ({...prev, time}))}
+                          disabled={!isAvailable}
+                        >
+                          {time}
+                          {!isAvailable && (
+                            <span className="time-slot-status">
+                              {isBooked ? 'Booked' : 'Unavailable'}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <p className="no-times-available">Please select a date first</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -574,68 +648,79 @@ const Booking = () => {
         </div>
 
         <div className="booking-summary">
-          <div className="summary-card">
-            <div className="summary-header">
-              <div className="summary-title">Booking Summary</div>
-            </div>
-            <div className="summary-content">
-              {formData.vehicleSize && (
-                <div className="summary-section">
-                  <h4>Vehicle Size</h4>
-                  <p>
-                    {formData.vehicleSize === 'sedan' ? 'Sedan/Mid SUV' :
-                     formData.vehicleSize === 'largeSuv' ? 'Large SUV' : 'Oversized'}
-                  </p>
-                </div>
-              )}
+  <div className="summary-card">
+    <div className="summary-header">
+      <div className="summary-title">Booking Summary</div>
+    </div>
+    <div className="summary-content">
+      {formData.vehicleSize && (
+        <div className="summary-section">
+          <h4>Vehicle Size</h4>
+          <p>
+            {formData.vehicleSize === 'sedan' ? 'Sedan/Mid SUV' :
+             formData.vehicleSize === 'largeSuv' ? 'Large SUV' : 'Oversized'}
+          </p>
+        </div>
+      )}
 
-              {formData.service && (
-                <div className="summary-section">
-                  <h4>Service</h4>
-                  <div className="service-summary">
-                    <span>{formData.service}</span>
-                    <span>${services.find(s => s.name === formData.service)?.prices[formData.vehicleSize] || 0}</span>
-                  </div>
-                </div>
-              )}
+      {formData.service && (
+        <div className="summary-section">
+          <h4>Service</h4>
+          <div className="service-summary">
+            <span>{formData.service}</span>
+            <span>
+              ${services.find(s => s.name === formData.service)?.prices[formData.vehicleSize]?.toFixed(2) || '0.00'}
+            </span>
+          </div>
+        </div>
+      )}
 
-              {selectedAddOns.length > 0 && (
-                <div className="summary-section">
-                  <h4>Add-Ons</h4>
-                  <ul className="add-ons-list">
-                    {selectedAddOns.map((addOnName, i) => {
-                      const service = services.find(s => s.name === formData.service);
-                      const addOn = service?.addOns.find(a => a.name === addOnName);
-                      return (
-                        <li key={i}>
-                          <span>{addOnName}</span>
-                          <span>+${addOn?.prices[formData.vehicleSize] || 0}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
+      {selectedAddOns.length > 0 && (
+        <div className="summary-section">
+          <h4>Add-Ons</h4>
+          <ul className="add-ons-list">
+            {selectedAddOns.map((addOnName, i) => {
+              const service = services.find(s => s.name === formData.service);
+              const addOn = service?.addOns.find(a => a.name === addOnName);
+              const price = addOn?.prices[formData.vehicleSize];
+              return (
+                <li key={i}>
+                  <span>{addOnName}</span>
+                  <span>
+                    {typeof price === 'number' ? `+$${price.toFixed(2)}` : price}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
 
-              {selectedDate && (
-                <div className="summary-section">
-                  <h4>Date</h4>
-                  <p>{selectedDate && moment(selectedDate).format('MMMM Do YYYY')}</p>
-                </div>
-              )}
+      {formData.date && (
+        <div className="summary-section">
+          <h4>Date</h4>
+          <p>{moment(formData.date).format('dddd, MMMM Do YYYY')}</p>
+        </div>
+      )}
 
-              {formData.time && (
-                <div className="summary-section">
-                  <h4>Time</h4>
-                  <p>{formData.time}</p>
-                </div>
-              )}
+      {formData.time && (
+        <div className="summary-section">
+          <h4>Time</h4>
+          <p>
+            {formData.time.includes('am') || formData.time.includes('pm') 
+              ? formData.time 
+              : `${formData.time}${parseInt(formData.time.split(':')[0]) >= 12 ? 'pm' : 'am'}`}
+          </p>
+        </div>
+      )}
 
-              <div className="summary-total">
-                <span>Total</span>
-                <span>${totalPrice}</span>
-              </div>
-
+      <div className="summary-total">
+        <span>Total</span>
+        <span>
+          ${typeof totalPrice === 'number' ? totalPrice.toFixed(2) : totalPrice}
+        </span>
+      </div>
+    
               <div className="navigation-buttons">
                 {currentStep < totalSteps ? (
                   <button

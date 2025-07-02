@@ -54,7 +54,7 @@ const Reviews = () => {
           </svg>
         </div>
         <h3>Thank you for your review!</h3>
-        <p>Your feedback will be visible after approval.</p>
+        <p>Your feedback helps us improve our service.</p>
         <button 
           className="back-button" 
           onClick={() => setSubmitted(false)}
@@ -72,7 +72,7 @@ const Reviews = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="glass-card">
+      <div className="glass-card-review-form">
         <div className="form-header">
           <h3>Share Your Experience</h3>
           <p>How was your service at JNS Auto Spa?</p>
