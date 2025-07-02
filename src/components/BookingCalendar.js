@@ -10,14 +10,23 @@ const BookingCalendar = ({
   onDateSelect,
   selectedDate
 }) => {
+  const handleSelectEvent = (event) => {
+    onDateSelect(event.start);
+  };
+
+  const handleSelectSlot = (slotInfo) => {
+    onDateSelect(slotInfo.start);
+  };
+
   return (
     <Calendar
       localizer={localizer}
-      
+      events={[]} 
       startAccessor="start"
       endAccessor="end"
       selectable
-      onSelectSlot={(slotInfo) => onDateSelect(slotInfo.start)}
+      onSelectSlot={handleSelectSlot}
+      onSelectEvent={handleSelectEvent}
       defaultView="month"
       views={['month']}
       dayPropGetter={(date) => {
@@ -61,6 +70,11 @@ const BookingCalendar = ({
         return {};
       }}
       style={{ height: 400 }}
+
+      longPressThreshold={1} // Makes the long press delay almost instantaneous
+      onDoubleClickEvent={null} // Disable double click handling
+      popup={false} 
+      doShowMoreDrillDown={false} 
     />
   );
 };

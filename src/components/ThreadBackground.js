@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { Renderer, Program, Mesh, Triangle, Color } from "ogl";
-
 import "./Threads.css";
 
 const vertexShader = `
@@ -25,7 +24,7 @@ uniform vec2 uMouse;
 
 #define PI 3.1415926538
 
-const int u_line_count = 40;
+const int u_line_count = 30;
 const float u_line_width = 7.0;
 const float u_line_blur = 10.0;
 
@@ -51,7 +50,7 @@ float Perlin2D(vec2 P) {
 }
 
 float pixel(float count, vec2 resolution) {
-    return (1.0 / max(resolution.x, resolution.y)) * count;
+  return (1.0 / max(resolution.x, resolution.y)) * count;
 }
 
 float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float time, float amplitude, float distance) {
@@ -94,7 +93,9 @@ float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float t
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
-    vec2 uv = fragCoord / iResolution.xy;
+  // Render at half resolution
+   vec2 fragCoordHalf = fragCoord * 1.0;;
+  vec2 uv = fragCoordHalf / iResolution.xy;
 
     float line_strength = 1.0;
     for (int i = 0; i < u_line_count; i++) {
@@ -124,19 +125,54 @@ const Threads = ({
   quality = 'medium',
   color = [4, 1, 1],
   amplitude = 1.5,
-  distance = .5,
+  distance = 0.5,
   enableMouseInteraction = false,
   ...rest
 }) => {
   const containerRef = useRef(null);
   const animationFrameId = useRef();
+  const isVisibleRef = useRef(true);
+  const rendererRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
 
-    const renderer = new Renderer({ alpha: true });
+    const qualitySettings = {
+      low: { 
+        lineCount: 15, 
+        amplitude: 1.0, 
+        distance: 0.3,
+        resolutionScale: 0.5
+      },
+      medium: { 
+        lineCount: 20, 
+        amplitude: 1.5, 
+        distance: 0.5,
+        resolutionScale: 0.75
+      },
+      high: { 
+        lineCount: 30, 
+        amplitude: 2.0, 
+        distance: 0.7,
+        resolutionScale: 1.0
+      }
+    };
+    const settings = qualitySettings[quality];
+
+    // Create renderer with lower resolution
+    const renderer = new Renderer({ 
+      alpha: true,
+      powerPreference: "low-power"
+    });
+    rendererRef.current = renderer;
     const gl = renderer.gl;
+    
+    // Set canvas style for crisp rendering at lower resolution
+    gl.canvas.style.width = "100%";
+    gl.canvas.style.height = "100%";
+  
+    
     gl.clearColor(0, 0, 0, 0);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -145,7 +181,7 @@ const Threads = ({
     const geometry = new Triangle(gl);
     const program = new Program(gl, {
       vertex: vertexShader,
-      fragment: fragmentShader,
+      fragment: fragmentShader.replace('u_line_count = 30;', `u_line_count = ${settings.lineCount};`),
       uniforms: {
         iTime: { value: 0 },
         iResolution: {
@@ -156,8 +192,8 @@ const Threads = ({
           ),
         },
         uColor: { value: new Color(...color) },
-        uAmplitude: { value: amplitude },
-        uDistance: { value: distance },
+        uAmplitude: { value: settings.amplitude },
+        uDistance: { value: settings.distance },
         uMouse: { value: new Float32Array([0.5, 0.5]) },
       },
     });
@@ -166,11 +202,19 @@ const Threads = ({
 
     function resize() {
       const { clientWidth, clientHeight } = container;
-      renderer.setSize(clientWidth, clientHeight);
-      program.uniforms.iResolution.value.r = clientWidth;
-      program.uniforms.iResolution.value.g = clientHeight;
-      program.uniforms.iResolution.value.b = clientWidth / clientHeight;
+      // Apply resolution scaling
+      const width = Math.floor(clientWidth * settings.resolutionScale);
+      const height = Math.floor(clientHeight * settings.resolutionScale);
+      
+      renderer.setSize(width, height);
+      gl.canvas.style.width = `${clientWidth}px`;
+      gl.canvas.style.height = `${clientHeight}px`;
+      
+      program.uniforms.iResolution.value.r = width;
+      program.uniforms.iResolution.value.g = height;
+      program.uniforms.iResolution.value.b = width / height;
     }
+    
     window.addEventListener("resize", resize);
     resize();
 
@@ -183,52 +227,88 @@ const Threads = ({
       const y = 1.0 - (e.clientY - rect.top) / rect.height;
       targetMouse = [x, y];
     }
+    
     function handleMouseLeave() {
       targetMouse = [0.5, 0.5];
     }
+    
     if (enableMouseInteraction) {
       container.addEventListener("mousemove", handleMouseMove);
       container.addEventListener("mouseleave", handleMouseLeave);
     }
 
     let lastTime = 0;
+    let frameCount = 0;
     function update(t) {
-       if (t - lastTime < 16) { // ~60fps
+      if (!isVisibleRef.current) return;
+      
+      // Throttle to ~30fps
+      if (t - lastTime < 33) {
         animationFrameId.current = requestAnimationFrame(update);
         return;
       }
       lastTime = t;
 
       if (enableMouseInteraction) {
-        const smoothing = 0.05;
-        currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0]);
-        currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1]);
-        program.uniforms.uMouse.value[0] = currentMouse[0];
-        program.uniforms.uMouse.value[1] = currentMouse[1];
+        // Only update if mouse has moved significantly
+        if (Math.abs(targetMouse[0] - currentMouse[0]) > 0.001 || 
+            Math.abs(targetMouse[1] - currentMouse[1]) > 0.001) {
+          const smoothing = 0.05;
+          currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0]);
+          currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1]);
+          program.uniforms.uMouse.value[0] = currentMouse[0];
+          program.uniforms.uMouse.value[1] = currentMouse[1];
+        }
       } else {
         program.uniforms.uMouse.value[0] = 0.5;
         program.uniforms.uMouse.value[1] = 0.5;
       }
+      
       program.uniforms.iTime.value = t * 0.001;
-
       renderer.render({ scene: mesh });
+      
       animationFrameId.current = requestAnimationFrame(update);
     }
+    
     animationFrameId.current = requestAnimationFrame(update);
 
-    return () => {
-      if (animationFrameId.current)
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+      if (!isVisibleRef.current && animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
+        animationFrameId.current = null;
+      } else if (isVisibleRef.current && !animationFrameId.current) {
+        animationFrameId.current = requestAnimationFrame(update);
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+        animationFrameId.current = null;
+      }
+      
       window.removeEventListener("resize", resize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
 
       if (enableMouseInteraction) {
         container.removeEventListener("mousemove", handleMouseMove);
         container.removeEventListener("mouseleave", handleMouseLeave);
       }
-      if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      
+      if (container.contains(gl.canvas)) {
+        container.removeChild(gl.canvas);
+      }
+      
+      // Proper cleanup
+      if (rendererRef.current) {
+        rendererRef.current.gl.getExtension('WEBGL_lose_context')?.loseContext();
+        rendererRef.current = null;
+      }
     };
-  }, [color, amplitude, distance, enableMouseInteraction]);
+  }, [color, amplitude, distance, enableMouseInteraction, quality]);
 
   return <div ref={containerRef} className="threads-container" {...rest} />;
 };
